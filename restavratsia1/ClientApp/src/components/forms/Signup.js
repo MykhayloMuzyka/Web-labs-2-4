@@ -1,17 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from "@material-ui/core";
+import {
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import request from "../Utils/RequestWrapper";
+import addPassConfirmMethod from "../Utils/GlobalMethods";
 
-Yup.addMethod(Yup.mixed, "sameAs", function (ref, message) {
-  return this.test("sameAs", message, function (value) {
-    const other = this.resolve(ref);
-    console.log("other : ", other);
-    console.log("value : ", value);
-    return !other || !value || value === other;
-  });
-});
+addPassConfirmMethod();
 
 export default function Signup(props) {
   let isCompany;
@@ -33,7 +39,7 @@ export default function Signup(props) {
         .max(16, "too long")
         .matches(
           "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,16}$",
-          "password must contain only [A-Z|a-z|0-9] characters and it length should be 8-16 characters"
+          "password must contain at least 1 [A-Z], 1 [a-z] and 1 [0-9] characters and it length should be 8-16 characters"
         )
         .required("this field is required"),
       passwordConfirmation: Yup.string()
@@ -95,7 +101,7 @@ export default function Signup(props) {
         .max(16, "too long")
         .matches(
           "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,16}$",
-          "password must contain only [A-Z|a-z|0-9] characters and it length should be 8-16 characters"
+          "password must contain at least 1 [A-Z], 1 [a-z] and 1 [0-9] characters and it length should be 8-16 characters"
         )
         .required("this field is required"),
       passwordConfirmation: Yup.string()
@@ -120,7 +126,17 @@ export default function Signup(props) {
     });
   }
 
-  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+  let icon;
+  props.type === "error" ? (icon = faTimesCircle) : (icon = faCheckCircle);
+
+  const {
+    handleSubmit,
+    setFieldValue,
+    handleChange,
+    values,
+    errors,
+    touched,
+  } = useFormik({
     initialValues: {
       username: "",
       companyName: "",
@@ -131,6 +147,9 @@ export default function Signup(props) {
       email: "",
       phone: "",
       isCompany: isCompany,
+      dialog: false,
+      btn: null,
+      msg: null,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -144,63 +163,60 @@ export default function Signup(props) {
         isCompany: values.isCompany,
         Phone: values.phone,
       };
-        if (props.usertype === "customer") newUser.Name = values.name;
-        else newUser.Name = values.companyName;
+      if (props.usertype === "customer") newUser.Name = values.name;
+      else newUser.Name = values.companyName;
 
-      alert(JSON.stringify(newUser));
-      axios
-          .post("https://localhost:44348/api/account/register/", JSON.stringify(newUser), {
-              headers: { "Content-Type": "application/json" },
-          })
-        .then((response) => {
-          console.log(response);
+      request({
+        method: "post",
+        url: "account/register/",
+        data: newUser,
+      })
+        .then((resp) => {
+          if (resp.status === 200) {
+            setFieldValue("msg", "Account successfully created!");
+            setFieldValue(
+              "btn",
+              <Link id="sign-up-redirect-btn" to={"/sign-in"} className="link">
+                <Button variant="contained" color="primary">
+                  ok
+                </Button>
+              </Link>
+            );
+            handleDialogOpen();
+          }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          console.log(err);
+          if (err.data.errors) {
+            if (err.data.errors.Login) {
+              setFieldValue("msg", err.data.errors.Login[0]);
+            } else {
+              setFieldValue("msg", err.data.errors[0].description);
+            }
+          } else {
+            setFieldValue("msg", "Something went wrong");
+          }
+          setFieldValue(
+            "btn",
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleDialogClose}
+            >
+              ok
+            </Button>
+          );
+          handleDialogOpen();
         });
     },
   });
-  /*
-  const cityOptions = [
-    "Lviv region",
-    "Kyiv region",
-    "Chernivci region",
-    "Ternopil region",
-    "Uzhgorod region",
-    "Vinnycia region",
-    "Khmelnyckyi region",
-    "Dnipro region",
-    "Kharkiv region",
-    "Cherkasy region",
-    "Chernigiv region",
-    "Sumy region",
-    "Kherson region",
-    "Krym region",
-    "Zhytomyr region",
-    "Lutsk region",
-    "Poltava region",
-    "Kirovograd region",
-    "Mykolaiv region",
-    "Zaporizhzhia region",
-    "Ivano-Frankivsk region",
-    "Rivne region",
-    "Odesa region",
-  ];
-*/
-  /*
-  const specOptions = [
-    "facade (buildings)",
-    "interior work (buildings)",
-    "furniture",
-    "sculptures/monuments",
-    "paintings",
-    "metal products",
-    "wood products",
-    "vehicles",
-    "electronic devices",
-    "other",
-  ];
-*/
+
+  const handleDialogOpen = () => {
+    setFieldValue("dialog", true);
+  };
+  const handleDialogClose = () => {
+    setFieldValue("dialog", false);
+  };
 
   if (props.usertype === "customer") form = customer();
   else form = company();
@@ -316,6 +332,18 @@ export default function Signup(props) {
           sign up
         </button>
       </div>
+      <Dialog
+        open={values.dialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <FontAwesomeIcon className="mr-1" icon={icon} /> {values.msg}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>{values.btn}</DialogActions>
+      </Dialog>
     </form>
   );
 

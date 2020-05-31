@@ -19,6 +19,11 @@ html.scroll-smooth {
   scroll-behavior: smooth;
 }
 
+input:disabled,
+input[disabled] {
+  color: black;
+}
+
 .errorValidationText {
   color: red;
   font-size: 15px;
@@ -29,8 +34,8 @@ html.scroll-smooth {
 
 header {
     position: fixed;
-    background-color: #6b0000;
-    height: 12%;
+    background-color: #750000;
+    height: 80px;
     width: 100%;
     margin: 0;
     opacity: 0.85;
@@ -59,7 +64,7 @@ header {
 }
 
 footer {
-    background-color: #6b0000;
+    background-color: #750000;
     height: 300px;
     font-family: Monospace;
     font-size: 17px;
@@ -135,6 +140,10 @@ footer {
 
 .width-inherit {
   width: inherit;
+}
+
+.maxwidth-inherit {
+  max-width: inherit;
 }
 
 .elem-fit {
@@ -249,10 +258,6 @@ footer {
   align-items: center;
 }
 
-.justify-content-center {
-    justify-content: center;
-}
-
 .position-relative {
   position: relative;
 }
@@ -271,6 +276,10 @@ footer {
 
 .d-flex {
   display: flex;
+}
+
+.d-none {
+  display: none;
 }
 
 .flex-end-center {
@@ -338,6 +347,11 @@ footer {
   text-indent: 20px;
   font-family: Monospace;
   font-size: 20px;
+}
+
+.text-default {
+  text-align: justify;
+  font-family: Monospace;
 }
 
 .text-align-center {
@@ -433,6 +447,10 @@ footer {
   width: 50%;
   text-indent: 0;
   margin-bottom: 5px;
+}
+
+.text-area {
+  font-size: 18px;
 }
 
 .input-text {
@@ -785,10 +803,6 @@ body.overflow-hidden {
   }
 }
 @media screen and (max-width: 768px) {
-  header > nav > a {
-    visibility: hidden;
-  }
-
   footer {
     height: 460px;
   }

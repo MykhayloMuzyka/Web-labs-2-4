@@ -1,27 +1,89 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useFormik } from "formik";
-import axios from "axios";
+import request from "../Utils/RequestWrapper";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function Signin(props) {
-  const { handleSubmit, handleChange, values } = useFormik({
+  const { handleSubmit, setFieldValue, handleChange, values } = useFormik({
     initialValues: {
       Login: "",
       Password: "",
+      dialog: false,
+      msg: "",
+      redirect: false,
+      redirectTo: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values));
-      axios
-          .post("https://localhost:44348/api/account/login/", JSON.stringify(values), {
-              headers: { "Content-Type": "application/json" },
-          })        .then((response) => {
-          console.log(response);
+    onSubmit: () => {
+      request({
+        method: "post",
+        url: "account/login/",
+        data: { Login: values.Login, Password: values.Password },
+      })
+        .then((resp) => {
+          if (resp.status === 200) {
+            window.localStorage.setItem("userId", resp.data.value.id);
+            window.localStorage.setItem("username", resp.data.value.username);
+            window.localStorage.setItem("isCompany", resp.data.value.isCompany);
+            if (resp.data.value.isCompany === 1) {
+              setFieldValue(
+                "redirectTo",
+                "/company-office/" + resp.data.value.id
+              );
+              setTimeout(() => {
+                handleRedirect();
+              }, 700);
+            } else if (resp.data.value.isCompany === 0) {
+              setFieldValue(
+                "redirectTo",
+                "/customer-office/" + resp.data.value.id
+              );
+              setTimeout(() => {
+                handleRedirect();
+              }, 700);
+            }
+          }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          if (err.data.errors) {
+            if (err.data.errors.Login && err.data.errors.Password)
+              setFieldValue(
+                "msg",
+                err.data.errors.Login[0] + ". " + err.data.errors.Password[0]
+              );
+            else if (err.data.errors.Login)
+              setFieldValue("msg", err.data.errors.Login[0]);
+            else setFieldValue("msg", err.data.errors.Password[0]);
+          } else if (err.data.message) {
+            setFieldValue("msg", err.data.message);
+          }
+          handleDialogOpen();
         });
     },
   });
+
+  const handleRedirect = () => {
+    setFieldValue("redirect", true);
+  };
+
+  const handleDialogOpen = () => {
+    setFieldValue("dialog", true);
+  };
+  const handleDialogClose = () => {
+    setFieldValue("dialog", false);
+  };
+
+  if (values.redirect) {
+    return <Redirect to={values.redirectTo} />;
+  }
 
   return (
     <form
@@ -72,6 +134,28 @@ export default function Signin(props) {
           sign in
         </button>
       </div>
+      <Dialog
+        open={values.dialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        onClose={handleDialogClose}
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <FontAwesomeIcon className="mr-1" icon={faTimesCircle} />{" "}
+            {values.msg}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDialogClose}
+          >
+            ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 }
