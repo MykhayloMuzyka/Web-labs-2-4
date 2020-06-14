@@ -1,4 +1,5 @@
 # Restavratsia
 Project for group of "professionals"
 
-JS requests JSON data format(client side) + Asp.net Core(server side) 
+# current status:
+React UI + .Net backend communication with JSON data format, REST-api requests(post, get)

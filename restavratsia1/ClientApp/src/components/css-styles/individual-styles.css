@@ -1,22 +1,27 @@
 #block1-sec1 {
-  background-image: url("images/fon1.jpg");
+    background-image: url("images/fon1.jpg");
 }
 
 #sec2 {
     background-image: url("images/fon3.png");
 }
 
+#mui.MuiAppBar-colorPrimary {
+    background-color: #750000;
+}
+
 #sec3 {
-  background-image: url("images/fon2.jpg");
+    background-image: url("images/fon2.jpg");
 }
 
 #sec4 {
     background-image: url("images/fon4.jpg");
 }
 
-/*#order-iface {
-  background-image: url("images/fon3.jpg");
-}*/
+#order-iface {
+  background-image: url("images/fon_orders.jpg");
+  min-height: 100vh;
+}
 
 #text-sec3 {
   border: none;
@@ -150,19 +155,17 @@
   }
 }
 #order-desk {
-  top: 12%;
-  position: fixed;
-  height: 88%;
+  height: 100%;
 }
 
-#card-container {
+#orders-container {
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: lightgrey;
 }
 
 #order-filters {
   min-width: 216px;
+  overflow-y: auto;
 }
 
 #card-box {
@@ -181,7 +184,7 @@
 }
 
 #order-if {
-  margin-top: 8%;
+  margin-top: 85px;
 }
 
 #sec4-text {
@@ -219,19 +222,14 @@
 
 #text-block,
 #devs-info {
-  margin-left: 25px;
   border: solid lightgrey 1px;
   border-radius: 10px;
   margin: 5px;
   padding: 25px 10px 25px 10px;
-  height: 50%;
+  height: 90%;
   flex-direction: column;
   align-items: flex-start;
   color: silver;
-  position: absolute;
-  left: 15%;
-  right: 40%;
-  top: 120%;
 }
 
 #text1-1 {
@@ -240,7 +238,7 @@
   font-weight: bold;
   font-size: 30px;
   text-indent: 0;
-  color: silver;
+  color: grey;
 }
 
 #block2-sec3 {
@@ -256,7 +254,7 @@
 }
 
 #login-section {
-  background-image: url("images/fon7.jpg");
+    background-image: url("images/fon7.jpg");
 }
 
 #login-container {
@@ -337,7 +335,7 @@
 }
 
 #reg-body {
-  background-image: url("images/fon8.png");
+    background-image: url("images/fon8.png");
 }
 
 #reg-cust-body,
@@ -377,6 +375,10 @@
   align-items: stretch;
 }
 
+#sign-up-redirect-btn {
+  color: white;
+}
+
 .text-indent-0 {
   text-indent: 0;
 }
@@ -386,7 +388,7 @@
 }
 
 #sec5 {
-  background-image: url("images/fon5.webp");
+    background-image: url("images/fon5.webp");
 }
 
 #sec5-textblock {
@@ -394,6 +396,11 @@
   max-width: inherit;
   background-color: white;
   border: none;
+}
+
+#profile{
+    border: 2px solid red;
+    border-radius:20px; 
 }
 
 .sign-btn {
@@ -423,7 +430,63 @@
 }
 
 #reg-section {
-  background-image: url("images/fon6.jpg");
+    background-image: url("images/fon6.jpg");
+}
+
+#cust-office {
+  height: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#cust-office-tabs {
+  width: 100%;
+}
+
+#profile-title {
+  font-size: 30px;
+}
+
+.profile-chapters {
+  font-size: 20px;
+}
+
+#change-pass-btn {
+  margin: 0;
+}
+
+.max-width {
+  max-width: 194px;
+}
+
+#cust-orders-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#cust-order-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+#create-order-close-icon {
+  height: 20px;
+  width: 20px;
+}
+
+#create-order-form {
+  margin-top: 6%;
+}
+
+@media screen and (max-device-width: 425px) {
+  #create-order-form {
+    margin-top: 12%;
+  }
+}
+@media screen and (max-device-width: 768px) {
+  #create-order-form {
+    margin-top: 9%;
+  }
 }
 
 /*# sourceMappingURL=individual-styles.css.map */

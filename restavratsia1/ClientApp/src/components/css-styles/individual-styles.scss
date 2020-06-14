@@ -6,6 +6,7 @@
 }
 #order-iface{
   background-image: url("images/poloski_chernyie_seryie_belyie_linii_32.jpg");
+  min-height: 100vh;
 }
 
 #text-sec3 {
@@ -132,19 +133,18 @@
 }
 //order-desk
 #order-desk{
-  top: 12%;
-  position: fixed;
-  height:88%;
+  height:100%;
+
 }
 
-#card-container{
+#orders-container{
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: lightgrey;
 }
 
 #order-filters{
   min-width: 216px;
+  overflow-y: auto;
 }
 
 #card-box{
@@ -163,7 +163,7 @@
   color: darkblue;
 }
 #order-if{
-  margin-top: 8%;
+  margin-top: 85px;
 }
 
 #sec4-text {
@@ -340,6 +340,9 @@
 .form-sign-up {
   align-items: stretch;
 }
+#sign-up-redirect-btn{
+  color: white;
+}
 
 .text-indent-0 {
   text-indent: 0;
@@ -386,4 +389,52 @@
 
 #reg-section {
   background-image: url("images/black-and-white-architecture-photography-1920x1200.jpg");
+}
+//customer office
+#cust-office{
+  height: 88%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#cust-office-tabs{
+  width: 100%;
+}
+//profile
+#profile-title{
+  font-size: 30px;
+}
+.profile-chapters{
+  font-size: 20px;
+}
+#change-pass-btn{
+  margin: 0;
+}
+.max-width{
+  max-width: 194px;
+}
+//customer orders
+#cust-orders-container{
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#cust-order-box{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(250px, 1fr));
+}
+#create-order-close-icon{
+  height: 20px;
+  width: 20px;
+}
+#create-order-form{
+  margin-top: 6%;
+}
+@media screen and (max-device-width: 425px){
+  #create-order-form{
+    margin-top: 12%;
+  }
+}
+@media screen and (max-device-width: 768px) {
+  #create-order-form {
+    margin-top: 9%;
+  }
 }

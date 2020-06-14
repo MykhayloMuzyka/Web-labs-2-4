@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using restavratsia1.Models.Repositories;
 
 namespace restavratsia1
 {
@@ -46,6 +47,7 @@ namespace restavratsia1
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             ); services.AddRazorPages();
+            services.AddScoped<CustomRepository>();
             //{
             //    options.User.RequireUniqueEmail = false;
             //});

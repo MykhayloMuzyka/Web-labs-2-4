@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {Link as LinkTo} from "react-scroll";
 import "./css-styles/styles.css";
 import "./css-styles/individual-styles.css";
-
 
 class Header extends Component {
   constructor(props) {
@@ -13,11 +11,12 @@ class Header extends Component {
     };
   }
 
-  createElemsWithHrefs = (className) => {
+  createElemsWithHrefs = () => {
     let elems = [];
     for (let i = 0; i < this.props.elements_href.length; i++) {
       elems.push(
         <a
+          key={i}
           href={this.props.hrefs[this.props.elements_href[i]]}
           className="menu-link"
         >
@@ -28,17 +27,31 @@ class Header extends Component {
     return elems;
   };
 
-  createElemsWithLinks = (className) => {
+  createElemsWithLinks = () => {
     let elems = [];
     for (let i = 0; i < this.props.elements_link.length; i++) {
-      elems.push(
-        <Link
-          to={this.props.links[this.props.elements_link[i]]}
-          className="menu-link"
-        >
-          {this.props.elements_link[i]}
-        </Link>
-      );
+      if (this.props.func_for_link) {
+        elems.push(
+          <Link
+            key={i}
+            to={this.props.links[this.props.elements_link[i]]}
+            className="menu-link"
+            onClick={this.props.func_for_link[this.props.elements_link[i]]}
+          >
+            {this.props.elements_link[i]}
+          </Link>
+        );
+      } else {
+        elems.push(
+          <Link
+            key={i}
+            to={this.props.links[this.props.elements_link[i]]}
+            className="menu-link"
+          >
+            {this.props.elements_link[i]}
+          </Link>
+        );
+      }
     }
     return elems;
   };
@@ -54,7 +67,6 @@ class Header extends Component {
 
     return (
       <header className="d-flex-spacebtw">
-
         <div className="col-3">
           <Link to="/">
             <img
@@ -64,10 +76,7 @@ class Header extends Component {
             />
           </Link>
         </div>
-        <nav
-          id="navigation"
-          className="menu flex-end-center col-9"
-        >
+        <nav id="navigation" className="menu flex-end-center col-9">
           <div className="flex-row-center">
             {href_elems}
             {link_elems}
